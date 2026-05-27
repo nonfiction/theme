@@ -1,7 +1,7 @@
 {
   "name": "nonfiction/theme",
   "description": "Reusable WordPress theme foundation for nonfiction projects.",
-  "license": "proprietary",
+  "license": "MIT",
   "type": "library",
   "autoload": {
     "files": [
