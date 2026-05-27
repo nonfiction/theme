@@ -1,0 +1,30 @@
+{
+  "name": "nonfiction/theme",
+  "description": "Reusable WordPress theme foundation for nonfiction projects.",
+  "license": "proprietary",
+  "type": "library",
+  "autoload": {
+    "files": [
+      "src/helpers.php"
+    ],
+    "psr-4": {
+      "Nonfiction\\Theme\\": [
+        "src/"
+      ]
+    }
+  },
+  "require": {
+    "php": ">=7.4",
+    "icanboogie/inflector": "^4.0",
+    "timber/timber": "^2.1.0"
+  },
+  "require-dev": {
+    "squizlabs/php_codesniffer": "^3.5.8"
+  },
+  "scripts": {
+    "test": [
+      "phpcs"
+    ],
+    "test:phpcs": "phpcs"
+  }
+}
