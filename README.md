@@ -1,4 +1,4 @@
-# Nonfiction Theme
+# nonfiction Theme
 
 Reusable WordPress theme foundation for nonfiction projects.
 
