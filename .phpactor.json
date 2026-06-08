@@ -1,0 +1,5 @@
+{
+  "indexer.stub_paths": [],
+  "language_server_php_cs_fixer.enabled": true,
+  "php_code_sniffer.enabled": true
+}
