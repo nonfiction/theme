@@ -47,4 +47,3 @@ return (new Config())
     'yoda_style' => false,
   ])
   ->setFinder($finder);
-;
