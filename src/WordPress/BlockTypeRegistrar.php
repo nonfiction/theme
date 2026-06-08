@@ -2,19 +2,16 @@
 
 namespace Nonfiction\Theme\WordPress;
 
-class BlockTypeRegistrar
-{
+class BlockTypeRegistrar {
   private static $block_types = [];
 
   // Skip re-registering core blocks through the custom registry.
-  public static function is_core_block_type($name)
-  {
+  public static function is_core_block_type($name) {
     return in_array($name, self::$core_block_types, true);
   }
 
   // Register custom blocks once and ignore duplicates.
-  public static function register_block_type($name, array $args = [])
-  {
+  public static function register_block_type($name, array $args = []) {
     if (empty($name)) {
       return false;
     }

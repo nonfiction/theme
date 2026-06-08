@@ -7,44 +7,36 @@ use ICanBoogie\StaticInflector;
 /* Utility Functions */
 
 // Alias to the inflector pluralize helper.
-function pluralize(...$args)
-{
+function pluralize(...$args) {
   return StaticInflector::pluralize(...$args);
 }
 // Alias to the inflector singularize helper.
-function singularize(...$args)
-{
+function singularize(...$args) {
   return StaticInflector::singularize(...$args);
 }
 // Alias to the inflector underscore helper.
-function underscore(...$args)
-{
+function underscore(...$args) {
   return StaticInflector::underscore(...$args);
 }
 // Alias to the inflector hyphenate helper.
-function hyphenate(...$args)
-{
+function hyphenate(...$args) {
   return StaticInflector::hyphenate(...$args);
 }
 // Alias to the inflector camelize helper.
-function camelize(...$args)
-{
+function camelize(...$args) {
   return StaticInflector::camelize(...$args);
 }
 // Alias to the inflector humanize helper.
-function humanize(...$args)
-{
+function humanize(...$args) {
   return StaticInflector::humanize(...$args);
 }
 // Alias to the inflector titleize helper.
-function titleize(...$args)
-{
+function titleize(...$args) {
   return StaticInflector::titleize(...$args);
 }
 
 // Custom pluralize inflection to ensure uniqueness.
-function unique_pluralize($word, $word_to_compare = false)
-{
+function unique_pluralize($word, $word_to_compare = false) {
 
   // If no comparison word is provided, use the word being pluralized.
   $word_to_compare = ($word_to_compare) ? $word_to_compare : $word;
@@ -68,23 +60,20 @@ function unique_pluralize($word, $word_to_compare = false)
  * @param int $priority
  * @param int $accepted_args
  */
-function add_actions(array $tags, $function_to_add, $priority = 10, $accepted_args = 1)
-{
+function add_actions(array $tags, $function_to_add, $priority = 10, $accepted_args = 1) {
   foreach ($tags as $tag) {
     \add_action($tag, $function_to_add, $priority, $accepted_args);
   }
 }
 
 // Register matching authenticated and public AJAX handlers.
-function add_ajax_action($tag, $function_to_add, $priority = 10, $accepted_args = 1)
-{
+function add_ajax_action($tag, $function_to_add, $priority = 10, $accepted_args = 1) {
   \add_action("wp_ajax_{$tag}", $function_to_add, $priority, $accepted_args);
   \add_action("wp_ajax_nopriv_{$tag}", $function_to_add, $priority, $accepted_args);
 }
 
 // Recursively sanitize mixed request values into scalars.
-function sanitize_param($param)
-{
+function sanitize_param($param) {
 
   // Recurse into arrays.
   if (is_array($param)) {
@@ -117,14 +106,12 @@ function sanitize_param($param)
 }
 
 // Read a request parameter and normalize its type.
-function get_param($name, $default = null)
-{
+function get_param($name, $default = null) {
   return sanitize_param($_REQUEST[$name] ?? $default);
 }
 
 // Convert an associative array to a comma-separated key:value string.
-function csv($input = [])
-{
+function csv($input = []) {
   $output = [];
   foreach ($input as $key => $val) {
     if ($val) {
@@ -136,16 +123,14 @@ function csv($input = [])
 }
 
 // Check a date string against a specific format.
-function validate_date($date, $format = 'Y-m-d')
-{
+function validate_date($date, $format = 'Y-m-d') {
   $d = \DateTime::createFromFormat($format, $date);
 
   return $d && $d->format($format) === $date;
 }
 
 // Read a JSON file or return the input unchanged if it is already an array.
-function import($path)
-{
+function import($path) {
   if (is_array($path)) {
     return $path;
   }
@@ -166,8 +151,7 @@ function import($path)
 }
 
 // Map values to keyed pairs and optionally group them.
-function map(array $list, callable $cb, $group_by = false)
-{
+function map(array $list, callable $cb, $group_by = false) {
 
   $all = [];
   foreach (($list ?? []) as $key => $val) {
@@ -197,8 +181,7 @@ function map(array $list, callable $cb, $group_by = false)
 }
 
 // Recursively change all keys from camelCase to camel_case.
-function underscore_keys($old = [])
-{
+function underscore_keys($old = []) {
   if (! is_array($old)) {
     return $old;
   }
@@ -213,8 +196,7 @@ function underscore_keys($old = [])
 }
 
 // Like empty(), but numeric values (including 0) count as non-empty.
-function is_empty($value = false)
-{
+function is_empty($value = false) {
   if (is_numeric($value)) {
     return false;
   }
@@ -226,20 +208,17 @@ function is_empty($value = false)
 }
 
 // Invert is_empty() for clearer conditions.
-function isnt_empty($value = false)
-{
+function isnt_empty($value = false) {
   return (! is_empty($value));
 }
 
 // Merge two JSON sources or arrays.
-function merge($array_or_file_1 = [], $array_or_file_2 = [])
-{
+function merge($array_or_file_1 = [], $array_or_file_2 = []) {
   return array_merge(import($array_or_file_1), import($array_or_file_2));
 }
 
 // Convert an associative array into a CSS string for a style attribute.
-function css($array)
-{
+function css($array) {
   return implode(
     '; ',
     array_map(
@@ -253,16 +232,14 @@ function css($array)
 }
 
 // Return true when a string starts with the given prefix.
-function starts_with($haystack, $needle)
-{
+function starts_with($haystack, $needle) {
   $length = strlen($needle);
 
   return substr($haystack, 0, $length) === $needle;
 }
 
 // Return true when a string ends with the given suffix.
-function ends_with($haystack, $needle)
-{
+function ends_with($haystack, $needle) {
   $length = strlen($needle);
   if (!$length) {
     return true;
@@ -272,8 +249,7 @@ function ends_with($haystack, $needle)
 }
 
 // Return a relative URL when it points at the current site.
-function make_link_relative($input)
-{
+function make_link_relative($input) {
 
   // Will be comparing input to home url.
   $site_url = parse_url(\network_home_url());
@@ -309,14 +285,12 @@ function make_link_relative($input)
 }
 
 // Strip all whitespace from a string.
-function nosp($string)
-{
+function nosp($string) {
   return preg_replace('/\s+/', '', strval($string));
 }
 
 // Display the value in QueryMonitor or to the screen.
-function log($value, $var_dump = false)
-{
+function log($value, $var_dump = false) {
   \do_action('qm/debug', $value);
   if ($var_dump) {
     echo '<br>';
@@ -330,8 +304,7 @@ function log($value, $var_dump = false)
 }
 
 // Dump a raw value directly to the page.
-function dump($value)
-{
+function dump($value) {
   echo '<br>';
   echo '<hr>';
   echo '<pre>';

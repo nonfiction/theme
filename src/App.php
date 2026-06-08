@@ -5,14 +5,12 @@ namespace Nonfiction\Theme;
 use Nonfiction\Theme\Timber\Post;
 use Timber;
 
-class App
-{
+class App {
   private static $path = __DIR__;
   private static $init = false;
 
   // Bootstrap Timber and base theme settings once.
-  public static function init($path = false)
-  {
+  public static function init($path = false) {
 
     // Guard against double bootstrapping.
     if (static::$init) {
@@ -36,8 +34,7 @@ class App
   }
 
   // Enqueue built assets when a manifest path is available.
-  public static function enqueue($manifest_path = false, $path = false)
-  {
+  public static function enqueue($manifest_path = false, $path = false) {
     if ($manifest_path) {
       $path = ($path) ? $path : static::$path;
       $path = str_replace('//', '/', $path . '/' . $manifest_path);
@@ -48,8 +45,7 @@ class App
   }
 
   // Import PHP files from a list of glob patterns.
-  public static function import($resource_paths = [], $path = false)
-  {
+  public static function import($resource_paths = [], $path = false) {
     $path = ($path) ? $path : static::$path;
     foreach ($resource_paths as $resource_path) {
       $resource_path = str_replace('//', '/', $path . '/' . $resource_path);
@@ -60,15 +56,13 @@ class App
   }
 
   // Set Timber's template locations from absolute paths.
-  public static function views($locations = [ 'templates', 'views'], $path = false)
-  {
+  public static function views($locations = [ 'templates', 'views'], $path = false) {
     $path = ($path) ? $path : static::$path;
     Timber::$locations = array_map(fn ($d) => str_replace('//', '/', $path . '/' . $d), $locations);
   }
 
   // Flush registered post types, theme hooks, and object cache.
-  public static function flush($force = false)
-  {
+  public static function flush($force = false) {
 
     Post::activate_all();
 

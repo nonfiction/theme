@@ -2,14 +2,12 @@
 
 namespace Nonfiction\Theme;
 
-class Enqueue
-{
+class Enqueue {
   public $src = [];
   public $script_types = [];
 
   // Wire the manifest into the relevant frontend and admin queues.
-  public function __construct($manifest_path)
-  {
+  public function __construct($manifest_path) {
     $this->load($manifest_path);
     $this->enable_script_types();
     $this->do_admin();
@@ -20,8 +18,7 @@ class Enqueue
   }
 
   // Load the manifest.json to get paths to compiled assets
-  private function load($manifest_path)
-  {
+  private function load($manifest_path) {
 
     $manifest = new ViteManifest($manifest_path);
 
@@ -42,8 +39,7 @@ class Enqueue
   }
 
   // <head> styles and scripts
-  private function do_head()
-  {
+  private function do_head() {
     \add_action('wp_enqueue_scripts', function () {
 
       $this->enqueue([ 'handle' => 'nf-head-css' ]);
@@ -52,8 +48,7 @@ class Enqueue
   }
 
   // <body> styles and scripts
-  private function do_body()
-  {
+  private function do_body() {
     \add_action('wp_enqueue_scripts', function () {
 
       $this->enqueue([ 'handle' => 'nf-body-css' ]);
@@ -62,8 +57,7 @@ class Enqueue
   }
 
   // Admin styles and scripts
-  private function do_admin()
-  {
+  private function do_admin() {
     \add_action('admin_enqueue_scripts', function ($hook) {
 
       // This breaks these admin pages, so skip them
@@ -77,8 +71,7 @@ class Enqueue
   }
 
   // Blocks styles and scripts (both front-end and admin)
-  private function do_blocks()
-  {
+  private function do_blocks() {
     \add_action('enqueue_block_assets', function () {
 
       $this->enqueue([ 'handle' => 'nf-blocks-css', 'deps' => ['wp-editor'] ]);
@@ -87,8 +80,7 @@ class Enqueue
   }
 
   // Editor (admin only)
-  private function do_editor()
-  {
+  private function do_editor() {
     \add_action('enqueue_block_assets', function () {
 
       if (! \is_admin()) {
@@ -118,8 +110,7 @@ class Enqueue
   }
 
   // Honor custom script types when registering assets.
-  private function enable_script_types()
-  {
+  private function enable_script_types() {
     \add_filter('script_loader_tag', function ($tag, $handle, $src) {
       $type = $this->script_types[ $handle ] ?? '';
 
@@ -146,8 +137,7 @@ class Enqueue
   }
 
   // Universal register/enqueue function
-  private function register($args = [], $enqueue = false)
-  {
+  private function register($args = [], $enqueue = false) {
 
     // Stop if these are missing
     $handle = $args['handle'] ?? '';
@@ -214,8 +204,7 @@ class Enqueue
   }
 
   // Universal enqueue function
-  private function enqueue($args = [])
-  {
+  private function enqueue($args = []) {
     $this->register($args, true);
   }
 }

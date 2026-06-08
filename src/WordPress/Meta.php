@@ -5,11 +5,9 @@ namespace Nonfiction\Theme\WordPress;
 use function Nonfiction\Theme\titleize;
 use function Nonfiction\Theme\underscore;
 
-class Meta
-{
+class Meta {
   // Register per-post-type meta with sane defaults and caps.
-  public static function register_post_meta($post_type, array $meta)
-  {
+  public static function register_post_meta($post_type, array $meta) {
     foreach ($meta as $meta_key => $meta_args) {
       $meta_key = underscore($meta_key);
       $meta_args = (is_array($meta_args)) ? $meta_args : [];
@@ -58,8 +56,7 @@ class Meta
   }
 
   // Register block-scoped meta when the config provides a key.
-  public static function register_block_post_meta(array $meta)
-  {
+  public static function register_block_post_meta(array $meta) {
     foreach ($meta as $meta_args) {
       $meta_args = (is_array($meta_args)) ? $meta_args : [];
 
@@ -82,8 +79,7 @@ class Meta
   }
 
   // Build CMB2 boxes from the configured metabox definitions.
-  public static function register_custom_meta_boxes(array $names, array $metaboxes)
-  {
+  public static function register_custom_meta_boxes(array $names, array $metaboxes) {
     if (! function_exists('new_cmb2_box')) {
       return;
     }

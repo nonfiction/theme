@@ -2,14 +2,12 @@
 
 namespace Nonfiction\Theme\Timber;
 
-class Menu extends \Timber\Menu
-{
+class Menu extends \Timber\Menu {
   private static $add_filters = false;
   private static $cache = [];
 
   // Add timber filters for menu and menuitems (only once)
-  public static function init_filters()
-  {
+  public static function init_filters() {
 
     if (! static::$add_filters) {
       \add_filter('timber/menu/class', function ($class, $term, $args) {
@@ -24,8 +22,7 @@ class Menu extends \Timber\Menu
   }
 
   // Retrieve a menu by slug, optionally rooted to a menu item slug
-  public static function get_menu($menu_slug, $menu_item_slug = false)
-  {
+  public static function get_menu($menu_slug, $menu_item_slug = false) {
 
     static::init_filters();
 
@@ -57,20 +54,17 @@ class Menu extends \Timber\Menu
   }
 
   // Alias to get_items method
-  public function items()
-  {
+  public function items() {
     return $this->get_items();
   }
 
   // Return normal get_items, after cleaning up the classnames
-  public function get_items()
-  {
+  public function get_items() {
     return static::clean_items(parent::get_items());
   }
 
   // Recursive function for tweaking menu classnames
-  private static function clean_items($items)
-  {
+  private static function clean_items($items) {
     foreach ($items as $item) {
       $item->classes = $item->get_classes();
       $item->class = implode(' ', $item->classes);

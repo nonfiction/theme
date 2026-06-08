@@ -2,11 +2,9 @@
 
 namespace Nonfiction\Theme;
 
-class Assets
-{
+class Assets {
   // Build a theme asset URL from a relative path.
-  public static function asset_uri($path = '')
-  {
+  public static function asset_uri($path = '') {
     $path = ltrim((string) $path, '/');
     $base = \untrailingslashit(\get_template_directory_uri());
 
@@ -14,8 +12,7 @@ class Assets
   }
 
   // Build a theme asset filesystem path from a relative path.
-  public static function asset_path($path = '')
-  {
+  public static function asset_path($path = '') {
     $path = ltrim((string) $path, '/');
     $base = \untrailingslashit(\get_template_directory());
 
@@ -23,24 +20,21 @@ class Assets
   }
 
   // Point seed media URLs at the theme's seed uploads directory.
-  public static function seed_asset_uri($path = '')
-  {
+  public static function seed_asset_uri($path = '') {
     $path = ltrim((string) $path, '/');
 
     return static::asset_uri($path === '' ? 'seed/uploads' : 'seed/uploads/' . $path);
   }
 
   // Build the filesystem path for seeded uploads.
-  public static function seed_asset_path($path = '')
-  {
+  public static function seed_asset_path($path = '') {
     $path = ltrim((string) $path, '/');
 
     return static::asset_path($path === '' ? 'seed/uploads' : 'seed/uploads/' . $path);
   }
 
   // Extract a seed-relative path from a legacy upload URL.
-  public static function seed_relative_asset_path($url)
-  {
+  public static function seed_relative_asset_path($url) {
     if (! is_string($url)) {
       return null;
     }
@@ -79,8 +73,7 @@ class Assets
   }
 
   // Rewrite legacy seed media URLs to the active theme path.
-  public static function normalize_seed_media_url($url)
-  {
+  public static function normalize_seed_media_url($url) {
     $relative = static::seed_relative_asset_path($url);
 
     if (! is_string($relative) || $relative === '') {
@@ -103,8 +96,7 @@ class Assets
   }
 
   // Serve seeded uploads directly from the theme when requested.
-  public static function maybe_serve_seed_asset()
-  {
+  public static function maybe_serve_seed_asset() {
     $request_uri = isset($_SERVER['REQUEST_URI']) ? \wp_unslash((string) $_SERVER['REQUEST_URI']) : '';
     $relative = static::seed_relative_asset_path($request_uri);
 
@@ -134,8 +126,7 @@ class Assets
   }
 
   // Rewrite seed media URLs inside rendered HTML content.
-  public static function normalize_seed_media_html($content)
-  {
+  public static function normalize_seed_media_html($content) {
     if (! is_string($content) || $content === '') {
       return $content;
     }
@@ -152,8 +143,7 @@ class Assets
   }
 
   // Normalize theme-relative asset URLs without touching external links.
-  public static function normalize_asset_url($url)
-  {
+  public static function normalize_asset_url($url) {
     if (! is_string($url)) {
       return $url;
     }
@@ -184,8 +174,7 @@ class Assets
   }
 
   // Recursively normalize asset URLs in arrays and scalars.
-  public static function normalize_asset_value($value)
-  {
+  public static function normalize_asset_value($value) {
     if (is_array($value)) {
       foreach ($value as $key => $item) {
         $value[ $key ] = static::normalize_asset_value($item);

@@ -9,15 +9,13 @@ use Timber\Timber;
 use function Nonfiction\Theme\ends_with;
 use function Nonfiction\Theme\import;
 
-class Block
-{
+class Block {
   public static $name = null;
   public static $args = [];
   public static $props = [];
 
   // Register a block from JSON config or a PHP override array.
-  public static function register_block_type($json = [], $override = [])
-  {
+  public static function register_block_type($json = [], $override = []) {
 
     // If the first parameter is a JSON path, import it first.
     if ((is_string($json)) and (ends_with($json, '.json'))) {
@@ -67,8 +65,7 @@ class Block
   }
 
   // Turn a render callback into compiled Twig output.
-  protected static function render_callback($render)
-  {
+  protected static function render_callback($render) {
     return function ($attributes, $inner = '', $block = null) use ($render) {
       $attributes = \Nonfiction\Theme\Assets::normalize_asset_value($attributes);
 
@@ -97,14 +94,12 @@ class Block
   }
 
   // Delegate block registration to WordPress after de-duping names.
-  protected static function register_custom_block_type($name, array $args)
-  {
+  protected static function register_custom_block_type($name, array $args) {
     return BlockTypeRegistrar::register_block_type($name, $args);
   }
 
   // Register block meta after the block type is saved.
-  protected static function register_post_meta()
-  {
+  protected static function register_post_meta() {
     Meta::register_block_post_meta(static::$props['meta'] ?? []);
   }
 }

@@ -2,8 +2,7 @@
 
 namespace Nonfiction\Theme;
 
-class ViteManifest
-{
+class ViteManifest {
   public $head;
   public $body;
   public $blocks;
@@ -11,14 +10,12 @@ class ViteManifest
   public $admin;
 
   // Load the manifest as soon as the wrapper is created.
-  public function __construct($manifest_path)
-  {
+  public function __construct($manifest_path) {
     $this->load($manifest_path);
   }
 
   // Read the Vite manifest into asset group properties.
-  public function load($manifest_path)
-  {
+  public function load($manifest_path) {
     $manifest = json_decode(file_get_contents($manifest_path));
 
     $this->head = $manifest->head ?? null;

@@ -2,15 +2,13 @@
 
 namespace Nonfiction\Theme\Timber;
 
-class MenuItem extends \Timber\MenuItem
-{
+class MenuItem extends \Timber\MenuItem {
   private $_children = null;
   private $_current_item_parent = null;
   private $_current_item_ancestor = null;
 
   // Return menu item children.
-  public function children()
-  {
+  public function children() {
     if ($this->_children === null) {
       $this->_children = parent::children() ?? [];
     }
@@ -19,8 +17,7 @@ class MenuItem extends \Timber\MenuItem
   }
 
   // Check regular menu item parentage.
-  public function current_item_parent()
-  {
+  public function current_item_parent() {
 
     if ($this->_current_item_parent === null) {
       if ($this->current_item_parent) {
@@ -36,8 +33,7 @@ class MenuItem extends \Timber\MenuItem
   }
 
   // Check regular menu item ancestry.
-  public function current_item_ancestor()
-  {
+  public function current_item_ancestor() {
 
     if ($this->_current_item_ancestor === null) {
       if ($this->current_item_ancestor) {
@@ -53,8 +49,7 @@ class MenuItem extends \Timber\MenuItem
   }
 
   // Derive menu item classes from Timber state.
-  public function get_classes()
-  {
+  public function get_classes() {
     $classes = [ 'leaf' ];
     $classes[] = 'menu-' . $this->slug;
     if ($this->current) {
@@ -74,14 +69,12 @@ class MenuItem extends \Timber\MenuItem
   }
 
   // Alias to children method
-  public function get_items()
-  {
+  public function get_items() {
     return $this->children();
   }
 
   // Alias to children method
-  public function items()
-  {
+  public function items() {
     return $this->children();
   }
 }

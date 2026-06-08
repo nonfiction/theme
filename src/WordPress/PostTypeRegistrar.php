@@ -2,11 +2,9 @@
 
 namespace Nonfiction\Theme\WordPress;
 
-class PostTypeRegistrar
-{
+class PostTypeRegistrar {
   // Map each WordPress role to the caps this registrar assigns.
-  private static function roles_caps(): array
-  {
+  private static function roles_caps(): array {
 
     $all_caps = [
       'create',
@@ -44,8 +42,7 @@ class PostTypeRegistrar
   }
 
   // Grant post-type caps once and refresh rewrites when needed.
-  public static function activate_post_type(array $names, $force = false)
-  {
+  public static function activate_post_type(array $names, $force = false) {
 
     // If this wordpress site isn't installed yet, bail
     if (! \is_blog_installed()) {
@@ -85,14 +82,12 @@ class PostTypeRegistrar
   }
 
   // Clear the activation flag so the type can be reprocessed.
-  public static function reset_activation($key_single)
-  {
+  public static function reset_activation($key_single) {
     \update_option("nf_{$key_single}_activated", '0');
   }
 
   // Normalize core args, then register a custom post type.
-  public static function register_custom_post_type(array $names, array $args = [], array $props = [])
-  {
+  public static function register_custom_post_type(array $names, array $args = [], array $props = []) {
 
     $args = array_merge([
       'public' => true,
@@ -120,8 +115,7 @@ class PostTypeRegistrar
   }
 
   // Apply template settings to an existing core post type.
-  public static function customize_native_post_type($post_type, array $args = [])
-  {
+  public static function customize_native_post_type($post_type, array $args = []) {
 
     $post_type_object = \get_post_type_object($post_type);
 
@@ -136,8 +130,7 @@ class PostTypeRegistrar
   }
 
   // Strip unsupported custom keys before passing args to WordPress.
-  private static function filter_core_post_type_args($args, $names)
-  {
+  private static function filter_core_post_type_args($args, $names) {
     unset(
       $args['site_sortables'],
       $args['site_filters'],
@@ -164,8 +157,7 @@ class PostTypeRegistrar
   }
 
   // Merge the default labels with any custom labels.
-  private static function default_post_type_labels($names)
-  {
+  private static function default_post_type_labels($names) {
     return [
       'name' => $names['label_plural'],
       'singular_name' => $names['label_single'],

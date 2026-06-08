@@ -2,11 +2,9 @@
 
 namespace Nonfiction\Theme\WordPress;
 
-class TaxonomyRegistrar
-{
+class TaxonomyRegistrar {
   // Register shared taxonomies or attach core ones to the post type.
-  public static function register_taxonomies($post_type, array $taxonomies, callable $name_generator)
-  {
+  public static function register_taxonomies($post_type, array $taxonomies, callable $name_generator) {
     foreach ($taxonomies as $name => $args) {
       if (($name == 'category') || ($name == 'tag')) {
         \register_taxonomy_for_object_type($name, $post_type);
@@ -39,8 +37,7 @@ class TaxonomyRegistrar
   }
 
   // Strip unsupported custom taxonomy args before core registration.
-  private static function filter_core_taxonomy_args($args, $names)
-  {
+  private static function filter_core_taxonomy_args($args, $names) {
     unset(
       $args['exclusive'],
       $args['allow_hierarchy'],
@@ -60,8 +57,7 @@ class TaxonomyRegistrar
   }
 
   // Merge default labels with any custom taxonomy labels.
-  private static function default_taxonomy_labels($names)
-  {
+  private static function default_taxonomy_labels($names) {
     return [
       'name' => $names['label_plural'],
       'singular_name' => $names['label_single'],
