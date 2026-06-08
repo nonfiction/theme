@@ -1,2 +1,19 @@
+# This is a php library
 /vendor/
 /composer.lock
+
+# Local env and state
+.env
+.direnv/
+
+# OS and editor noise
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Misc editor tooling
+.php-cs-fixer.cache
