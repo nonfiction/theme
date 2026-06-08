@@ -1,6 +1,6 @@
 <?php
 
-// phpcs:ignoreFile -- LSP-only global WordPress/CMB2 stubs, not package source.
+// LSP-only global WordPress/CMB2 stubs, not package source.
 
 if (! class_exists('WP_Post')) {
   class WP_Post

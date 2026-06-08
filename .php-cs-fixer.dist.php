@@ -16,6 +16,10 @@ return (new Config())
   ->setRiskyAllowed(false)
   ->setRules([
     '@PSR12' => true,
+    'braces_position' => [
+      'classes_opening_brace' => 'same_line',
+      'functions_opening_brace' => 'same_line',
+    ],
     'array_indentation' => true,
     'array_syntax' => ['syntax' => 'short'],
     'binary_operator_spaces' => ['default' => 'single_space'],

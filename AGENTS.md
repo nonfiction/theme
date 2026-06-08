@@ -25,7 +25,7 @@
 - PHP `>=7.4`
 - `timber/timber`
 - `icanboogie/inflector`
-- Dev only: `squizlabs/php_codesniffer`
+- Dev only: `friendsofphp/php-cs-fixer`
 
 ## Key files and responsibilities
 
