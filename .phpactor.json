@@ -1,5 +1,7 @@
 {
-  "indexer.stub_paths": [],
+  "indexer.stub_paths": [
+    "%project_root%/stubs"
+  ],
   "language_server_php_cs_fixer.enabled": true,
   "php_code_sniffer.enabled": true
 }
