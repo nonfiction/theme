@@ -2,32 +2,34 @@
 
 namespace Nonfiction\Theme\WordPress;
 
-class BlockTypeRegistrar {
-
+class BlockTypeRegistrar
+{
   private static $block_types = [];
 
   // Skip re-registering core blocks through the custom registry.
-  public static function is_core_block_type( $name ) {
-    return in_array( $name, self::$core_block_types, true );
+  public static function is_core_block_type($name)
+  {
+    return in_array($name, self::$core_block_types, true);
   }
 
   // Register custom blocks once and ignore duplicates.
-  public static function register_block_type( $name, array $args = [] ) {
-    if ( empty( $name ) ) {
+  public static function register_block_type($name, array $args = [])
+  {
+    if (empty($name)) {
       return false;
     }
 
-    if ( isset( self::$block_types[ $name ] ) ) {
+    if (isset(self::$block_types[ $name ])) {
       return false;
     }
 
     self::$block_types[ $name ] = $name;
 
-    if ( self::is_core_block_type( $name ) ) {
+    if (self::is_core_block_type($name)) {
       return true;
     }
 
-    return \call_user_func( 'register_block_type', $name, $args );
+    return \call_user_func('register_block_type', $name, $args);
   }
 
   private static $core_block_types = [
@@ -109,5 +111,4 @@ class BlockTypeRegistrar {
     'core-embed/wordpress-tv',
     'core-embed/amazon-kindle',
   ];
-
 }

@@ -2,44 +2,45 @@
 
 namespace Nonfiction\Theme\WordPress;
 
-class TaxonomyRegistrar {
-
+class TaxonomyRegistrar
+{
   // Register shared taxonomies or attach core ones to the post type.
-  public static function register_taxonomies( $post_type, array $taxonomies, callable $name_generator ) {
-    foreach ( $taxonomies as $name => $args ) {
+  public static function register_taxonomies($post_type, array $taxonomies, callable $name_generator)
+  {
+    foreach ($taxonomies as $name => $args) {
+      if (($name == 'category') || ($name == 'tag')) {
+        \register_taxonomy_for_object_type($name, $post_type);
 
-      if ( ( $name == 'category' ) || ( $name == 'tag' ) ) {
-        register_taxonomy_for_object_type( $name, $post_type );
         continue;
       }
 
-      $tax_args = ( is_array( $args ) ) ? $args : [];
-      $tax_names = $name_generator( $name, $tax_args['names'] ?? [] );
+      $tax_args = (is_array($args)) ? $args : [];
+      $tax_names = $name_generator($name, $tax_args['names'] ?? []);
       $tax_name = $tax_names['key_single']; // update $name arg in case it got modified
 
       // Default taxonomy args before filtering out custom-only keys.
       $args = array_merge([
-        'public'            => true,
-        'show_ui'           => true,
-        'hierarchical'      => true,
-        'query_var'         => $tax_names['slug_single'],
-        'exclusive'         => false,
-        'allow_hierarchy'   => false,
-        'meta_box'          => null,
-        'dashboard_glance'  => false,
-        'checked_ontop'     => null,
-        'admin_cols'        => null,
-        'required'          => false,
+        'public' => true,
+        'show_ui' => true,
+        'hierarchical' => true,
+        'query_var' => $tax_names['slug_single'],
+        'exclusive' => false,
+        'allow_hierarchy' => false,
+        'meta_box' => null,
+        'dashboard_glance' => false,
+        'checked_ontop' => null,
+        'admin_cols' => null,
+        'required' => false,
 
       ], $tax_args);
 
-      register_taxonomy( $tax_name, $post_type, self::filter_core_taxonomy_args( $args, $tax_names ) );
-
+      \register_taxonomy($tax_name, $post_type, self::filter_core_taxonomy_args($args, $tax_names));
     }
   }
 
   // Strip unsupported custom taxonomy args before core registration.
-  private static function filter_core_taxonomy_args( $args, $names ) {
+  private static function filter_core_taxonomy_args($args, $names)
+  {
     unset(
       $args['exclusive'],
       $args['allow_hierarchy'],
@@ -49,17 +50,18 @@ class TaxonomyRegistrar {
       $args['admin_cols'],
       $args['required'],
       $args['site_sortables'],
-      $args['site_filters']
+      $args['site_filters'],
     );
 
     $args['rewrite'] = $args['rewrite'] ?? [ 'slug' => $names['slug_plural'] ];
-    $args['labels'] = array_replace( self::default_taxonomy_labels( $names ), $args['labels'] ?? [] );
+    $args['labels'] = array_replace(self::default_taxonomy_labels($names), $args['labels'] ?? []);
 
     return $args;
   }
 
   // Merge default labels with any custom taxonomy labels.
-  private static function default_taxonomy_labels( $names ) {
+  private static function default_taxonomy_labels($names)
+  {
     return [
       'name' => $names['label_plural'],
       'singular_name' => $names['label_single'],
@@ -88,5 +90,4 @@ class TaxonomyRegistrar {
       'name_admin_bar' => $names['label_plural'],
     ];
   }
-
 }

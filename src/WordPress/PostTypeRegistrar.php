@@ -2,10 +2,11 @@
 
 namespace Nonfiction\Theme\WordPress;
 
-class PostTypeRegistrar {
-
+class PostTypeRegistrar
+{
   // Map each WordPress role to the caps this registrar assigns.
-  private static function roles_caps(): array {
+  private static function roles_caps(): array
+  {
 
     $all_caps = [
       'create',
@@ -36,106 +37,107 @@ class PostTypeRegistrar {
 
     return [
       'administrator' => $all_caps,
-      'editor'        => $all_caps,
-      'author'        => $most_caps,
-      'contributor'   => $few_caps,
+      'editor' => $all_caps,
+      'author' => $most_caps,
+      'contributor' => $few_caps,
     ];
-
   }
 
   // Grant post-type caps once and refresh rewrites when needed.
-  public static function activate_post_type( array $names, $force = false ) {
+  public static function activate_post_type(array $names, $force = false)
+  {
 
     // If this wordpress site isn't installed yet, bail
-    if ( ! \is_blog_installed() ) return;
+    if (! \is_blog_installed()) {
+      return;
+    }
 
     // Post Type in single and plural
     $key_single = $names['key_single'];
     $key_plural = $names['key_plural'];
 
     // Check if this has been activated before
-    $isnt_activated = ( '1' !== \get_option( "nf_{$key_single}_activated" ) ) ? true : false;
+    $isnt_activated = ('1' !== \get_option("nf_{$key_single}_activated")) ? true : false;
 
     // Activate if it hasn't, or if being forced to
-    if ( ($isnt_activated) or ($force) ) {
-
+    if (($isnt_activated) or ($force)) {
       // Add default caps to default roles
-      foreach( self::roles_caps() as $role_type => $cap_types ) {
-        $role = \get_role( $role_type );
+      foreach (self::roles_caps() as $role_type => $cap_types) {
+        $role = \get_role($role_type);
 
-        if ( ! $role ) {
+        if (! $role) {
           continue;
         }
 
-        foreach( $cap_types as $cap_type ) {
-          $role->add_cap( "{$cap_type}_{$key_plural}" );
+        foreach ($cap_types as $cap_type) {
+          $role->add_cap("{$cap_type}_{$key_plural}");
         }
       }
 
       // Update rewrite database
       \flush_rewrite_rules(false);
-
     }
 
     // Set this as activated now
     if ($isnt_activated) {
-      \update_option( "nf_{$key_single}_activated", '1' );
+      \update_option("nf_{$key_single}_activated", '1');
     }
-
   }
 
   // Clear the activation flag so the type can be reprocessed.
-  public static function reset_activation( $key_single ) {
-    \update_option( "nf_{$key_single}_activated", '0' );
+  public static function reset_activation($key_single)
+  {
+    \update_option("nf_{$key_single}_activated", '0');
   }
 
   // Normalize core args, then register a custom post type.
-  public static function register_custom_post_type( array $names, array $args = [], array $props = [] ) {
+  public static function register_custom_post_type(array $names, array $args = [], array $props = [])
+  {
 
     $args = array_merge([
-        'public'          => true,
-        'show_ui'         => true,
-        'show_in_menu'    => true,
-        'supports'        => ['title', 'editor', 'thumbnail', 'revisions', 'custom-fields'],
-        'has_archive'     => $props['has_archive'] ?? false,
-        'query_var'       => $names['slug_single'],
-        'capability_type' => [$names['key_single'], $names['key_plural']],
-        'map_meta_cap'    => true,
-        'show_in_rest'    => true,
-        'rest_base'       => $names['slug_plural'],
-        'taxonomies'      => array_keys( $props['taxonomies'] ?? [] ),
+      'public' => true,
+      'show_ui' => true,
+      'show_in_menu' => true,
+      'supports' => ['title', 'editor', 'thumbnail', 'revisions', 'custom-fields'],
+      'has_archive' => $props['has_archive'] ?? false,
+      'query_var' => $names['slug_single'],
+      'capability_type' => [$names['key_single'], $names['key_plural']],
+      'map_meta_cap' => true,
+      'show_in_rest' => true,
+      'rest_base' => $names['slug_plural'],
+      'taxonomies' => array_keys($props['taxonomies'] ?? []),
 
-        'rewrite' => [
-        ],
+      'rewrite' => [
+      ],
 
-      ], $args);
+    ], $args);
 
-    \register_post_type( $names['key_single'], self::filter_core_post_type_args( $args, $names ) );
+    \register_post_type($names['key_single'], self::filter_core_post_type_args($args, $names));
 
-    foreach ( $args['unsupports'] ?? [] as $feature ) {
-      \remove_post_type_support( $names['key_single'], $feature );
+    foreach ($args['unsupports'] ?? [] as $feature) {
+      \remove_post_type_support($names['key_single'], $feature);
     }
-
   }
 
   // Apply template settings to an existing core post type.
-  public static function customize_native_post_type( $post_type, array $args = [] ) {
+  public static function customize_native_post_type($post_type, array $args = [])
+  {
 
-    $post_type_object = \get_post_type_object( $post_type );
+    $post_type_object = \get_post_type_object($post_type);
 
-    if ( $post_type_object ) {
+    if ($post_type_object) {
       $post_type_object->template = $args['template'] ?? null;
       $post_type_object->template_lock = $args['template_lock'] ?? false;
     }
 
-    foreach ( $args['unsupports'] ?? [] as $feature ) {
-      \remove_post_type_support( $post_type, $feature );
+    foreach ($args['unsupports'] ?? [] as $feature) {
+      \remove_post_type_support($post_type, $feature);
     }
-
   }
 
   // Strip unsupported custom keys before passing args to WordPress.
-  private static function filter_core_post_type_args( $args, $names ) {
+  private static function filter_core_post_type_args($args, $names)
+  {
     unset(
       $args['site_sortables'],
       $args['site_filters'],
@@ -145,24 +147,25 @@ class PostTypeRegistrar {
       $args['featured_image'],
       $args['quick_edit'],
       $args['block_editor'],
-      $args['show_in_feed']
+      $args['show_in_feed'],
     );
 
-    if ( isset( $args['rewrite'] ) && is_array( $args['rewrite'] ) && array_key_exists( 'permastruct', $args['rewrite'] ) ) {
-      unset( $args['rewrite']['permastruct'] );
+    if (isset($args['rewrite']) && is_array($args['rewrite']) && array_key_exists('permastruct', $args['rewrite'])) {
+      unset($args['rewrite']['permastruct']);
 
-      if ( $args['rewrite'] === [] ) {
+      if ($args['rewrite'] === []) {
         $args['rewrite'] = true;
       }
     }
 
-    $args['labels'] = array_replace( self::default_post_type_labels( $names ), $args['labels'] ?? [] );
+    $args['labels'] = array_replace(self::default_post_type_labels($names), $args['labels'] ?? []);
 
     return $args;
   }
 
   // Merge the default labels with any custom labels.
-  private static function default_post_type_labels( $names ) {
+  private static function default_post_type_labels($names)
+  {
     return [
       'name' => $names['label_plural'],
       'singular_name' => $names['label_single'],
@@ -200,5 +203,4 @@ class PostTypeRegistrar {
       'name_admin_bar' => $names['label_single'],
     ];
   }
-
 }
