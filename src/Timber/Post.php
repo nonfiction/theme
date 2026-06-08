@@ -16,21 +16,18 @@ use function Nonfiction\Theme\titleize;
 use function Nonfiction\Theme\underscore;
 use function Nonfiction\Theme\unique_pluralize;
 
-class Post extends \Timber\Post
-{
+class Post extends \Timber\Post {
   private static $post_types = [];
   public static $classmap = [];
   protected static $register_post_type = [];
 
   // Register the post type hook when the class boots.
-  public static function __constructStatic()
-  {
+  public static function __constructStatic(): void {
     \add_action('init', [ static::class, 'register_post_type' ], 10);
   }
 
   // Default Timber lookups to this post type.
-  public static function get_post($query = [], $options = [])
-  {
+  public static function get_post($query = [], $options = []): ?\Timber\Post {
     $query = (is_array($query)) ? array_merge([
       'post_type' => static::$name,
     ], $query) : $query;
@@ -39,8 +36,7 @@ class Post extends \Timber\Post
   }
 
   // Return all posts for this type unless the query narrows it.
-  public static function get_posts($query = [], $options = [])
-  {
+  public static function get_posts($query = [], $options = []): ?\Timber\PostCollectionInterface {
     $query = (is_array($query)) ? array_merge([
       'post_type' => static::$name,
       'posts_per_page' => -1,
@@ -50,16 +46,14 @@ class Post extends \Timber\Post
   }
 
   // Look up one post in this type by a Timber search field.
-  public static function get_post_by($type, $search_value, $args = null)
-  {
+  public static function get_post_by($type, $search_value, $args = null): ?\Timber\Post {
     $args = (is_array($args)) ? $args : [ 'post_type' => static::$name ];
 
     return \Timber::get_post_by($type, $search_value, $args);
   }
 
   // Keep Timber links relative when the helper exists.
-  public function link()
-  {
+  public function link(): string {
     $link = parent::link();
 
     return (function_exists('\Nonfiction\Theme\make_link_relative')) ? \Nonfiction\Theme\make_link_relative($link) : $link;
@@ -71,8 +65,7 @@ class Post extends \Timber\Post
   public static $props = [];
 
   // Register the class-backed post type and its extras.
-  public static function register_post_type($json = [], $override = [])
-  {
+  public static function register_post_type($json = [], $override = []) {
 
     // If the first parameter is a path to .json file, import that
     if ((is_string($json)) and (ends_with($json, '.json'))) {
@@ -172,20 +165,17 @@ class Post extends \Timber\Post
   }
 
   // Hook for subclasses before registration finishes.
-  private static function before_register_post_type()
-  {
+  private static function before_register_post_type(): bool {
     return true;
   }
 
   // Hook for subclasses after registration finishes.
-  private static function after_register_post_type()
-  {
+  private static function after_register_post_type(): bool {
     return true;
   }
 
   // Build the key, label, slug, and class name variants.
-  private static function generate_names($name, $names = [])
-  {
+  private static function generate_names($name, $names = []): array {
 
     // Ensure name is lowercase
     $name = strtolower($name);
@@ -248,20 +238,17 @@ class Post extends \Timber\Post
   }
 
   // Register the custom post type with the computed names and args.
-  private static function register_custom_post_type()
-  {
+  private static function register_custom_post_type(): void {
     PostTypeRegistrar::register_custom_post_type(static::$names, static::$args, static::$props);
   }
 
   // Register any configured CMB2 metaboxes for this type.
-  private static function register_custom_meta_boxes()
-  {
+  private static function register_custom_meta_boxes(): void {
     Meta::register_custom_meta_boxes(static::$names, static::$props['metaboxes'] ?? []);
   }
 
   // Limit the editor to the configured block types for this post type.
-  private static function register_allowed_block_types()
-  {
+  private static function register_allowed_block_types(): void {
 
     $names = static::$names;
     $props = static::$props;
@@ -289,8 +276,7 @@ class Post extends \Timber\Post
   }
 
   // Add a block category named after this post type.
-  private static function register_block_categories()
-  {
+  private static function register_block_categories(): void {
     $names = static::$names;
     \add_filter('block_categories_all', function ($block_categories, $editor_context) use ($names) {
       if (! empty($editor_context->post)) {
@@ -304,22 +290,19 @@ class Post extends \Timber\Post
   }
 
   // Register any taxonomies declared for this post type.
-  private static function register_taxonomies()
-  {
+  private static function register_taxonomies(): void {
     TaxonomyRegistrar::register_taxonomies(static::$name, static::$props['taxonomies'] ?? [], function ($name, $names = []) {
       return static::generate_names($name, $names);
     });
   }
 
   // Register post meta fields for this type.
-  private static function register_post_meta()
-  {
+  private static function register_post_meta(): void {
     Meta::register_post_meta(static::$name, static::$props['meta'] ?? []);
   }
 
   // Treat core posts and pages as native types.
-  private static function is_native_post_type()
-  {
+  private static function is_native_post_type(): bool {
     if ((static::$name == 'post') or (static::$name == 'page')) {
       return true;
     } else {
@@ -328,15 +311,13 @@ class Post extends \Timber\Post
   }
 
   // Activate role caps and rewrite rules for this type.
-  public static function activate($force = false)
-  {
+  public static function activate($force = false): void {
 
     PostTypeRegistrar::activate_post_type(static::$names, $force);
   }
 
   // Reset activation markers for every registered post type.
-  public static function activate_all()
-  {
+  public static function activate_all(): void {
     foreach (self::$post_types as $post_type) {
       PostTypeRegistrar::reset_activation($post_type);
     }
