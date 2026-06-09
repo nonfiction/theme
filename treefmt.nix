@@ -1,22 +1,24 @@
-{pkgs, ...}: {
+{
   projectRootFile = "flake.nix";
 
-  programs.alejandra.enable = true;
-  settings.formatter.alejandra.includes = [
-    "*.nix"
-    "**/*.nix"
-  ];
+  programs.alejandra = {
+    enable = true;
+    includes = [
+      "*.nix"
+      "**/*.nix"
+    ];
+  };
 
   programs.php-cs-fixer = {
     enable = true;
     configFile = "./.php-cs-fixer.dist.php";
+    includes = [
+      "src/**/*.php"
+    ];
   };
-  settings.formatter.php-cs-fixer.includes = pkgs.lib.mkForce [
-    "src/**/*.php"
-  ];
 
-  settings.formatter.prettier = {
-    command = pkgs.lib.getExe pkgs.prettier;
+  programs.prettier = {
+    enable = true;
     includes = [
       "*.json"
       "**/*.json"
