@@ -13,6 +13,7 @@
     enable = true;
     configFile = "./.php-cs-fixer.dist.php";
     includes = [
+      "src/*.php"
       "src/**/*.php"
     ];
   };
