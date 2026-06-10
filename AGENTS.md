@@ -5,6 +5,7 @@
 - Reusable WordPress + Timber theme foundation for Nonfiction projects.
 - Scope is package-level infrastructure only: helpers, bootstrapping, assets, Timber adapters, and WordPress registrars.
 - Do not add client-specific content, design, routes, seeded pages, or project conventions here.
+- Human usage should point consumers to the Packagist package: <https://packagist.org/packages/nonfiction/theme>.
 
 ## Namespace and autoload
 
@@ -23,9 +24,16 @@
 ## Current dependencies
 
 - PHP `>=7.4`
-- `timber/timber`
-- `icanboogie/inflector`
+- `timber/timber` `^2.5.1`
+- `icanboogie/inflector` `^4.0`
 - Dev only: `friendsofphp/php-cs-fixer`
+
+## Human usage guidance
+
+- Normal consuming-theme installation is `composer require nonfiction/theme` from Packagist.
+- Local Composer path repositories are for package development only, not the default README usage path.
+- Consuming themes should require Composer's autoloader and bootstrap with `Nonfiction\Theme\App` from their own entry point.
+- Keep README examples generic and package-level; do not mention client-specific namespaces, templates, or content.
 
 ## Key files and responsibilities
 
@@ -57,11 +65,11 @@
 - Preserve existing WordPress/Timber behavior unless runtime checks prove a safe change.
 - Keep package extraction clean; do not add consumer-specific behavior.
 - Do not commit `vendor/`.
-- `composer.lock` is ignored here.
+- `composer.lock` is ignored here because this repository is a library.
 
 ## Validation
 
-- `composer validate --no-check-publish`
+- `composer validate --no-check-publish --no-check-lock`
 - `for f in $(git ls-files '*.php'); do php -l "$f" || exit 1; done`
 - `composer dump-autoload`
 - If checking the client consumer, run from `/home/jon/src/nonfiction/sanjel`:
@@ -71,5 +79,6 @@
 ## Composer and repo notes
 
 - Package name: `nonfiction/theme`
-- Suggested repo: `github.com/nonfiction/theme`
-- Local development can use the path repository from the client consumer; later this can switch to VCS or Packagist.
+- Packagist package: <https://packagist.org/packages/nonfiction/theme>
+- Repository: `github.com/nonfiction/theme`
+- Local development can use a Composer path repository from a client consumer, but published usage should go through Packagist.
