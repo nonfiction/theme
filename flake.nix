@@ -19,6 +19,7 @@
         devShells.default = pkgs.mkShell {
           packages = with pkgs; [
             treefmtEval.config.build.wrapper
+            phpactor
             php83
             php83Packages.composer
             php83Packages.php-cs-fixer
