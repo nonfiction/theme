@@ -80,11 +80,15 @@ class Meta {
 
   // Build CMB2 boxes from the configured metabox definitions.
   public static function register_custom_meta_boxes(array $names, array $metaboxes) {
-    if (! function_exists('new_cmb2_box')) {
+    if (empty($metaboxes)) {
       return;
     }
 
-    \add_action('cmb2_admin_init', function () use ($names, $metaboxes) {
+    $register = function () use ($names, $metaboxes) {
+      if (! function_exists('new_cmb2_box')) {
+        return;
+      }
+
       foreach ($metaboxes as $metabox) {
         $metabox['title'] ??= $names['label_single'];
         $metabox['context'] ??= 'side';
@@ -108,6 +112,12 @@ class Meta {
           }
         }
       }
-    }, 20);
+    };
+
+    if (\did_action('cmb2_admin_init')) {
+      $register();
+    } else {
+      \add_action('cmb2_admin_init', $register, 20);
+    }
   }
 }
